@@ -1,0 +1,26 @@
+flowchart TB
+    DEV["Windows 11 laptop<br/>Postman / curl / browser<br/>kubectl port-forward 8081, 8082"]
+    subgraph DD["Docker Desktop"]
+        IMG["Local images<br/>member-service:1.0<br/>book-service:1.0"]
+        subgraph K8S["Kubernetes cluster (Docker Desktop)"]
+            subgraph NS["namespace: library-system"]
+                direction TB
+                SVC1["Service member-service<br/>NodePort 30091 to 8081"]
+                SVC2["Service book-service<br/>NodePort 30092 to 8082"]
+                P1["Deployment member-service<br/>Pod, H2 in memory"]
+                P2["Deployment book-service<br/>Pod, H2 in memory"]
+                CM["ConfigMap book-service-config<br/>MEMBER_SERVICE_URL"]
+                HPA["HPA (optional)"]
+                SVC1 --> P1
+                SVC2 --> P2
+                P2 -->|"REST http://member-service:8081"| SVC1
+                CM --> P2
+                HPA -.-> P1
+                HPA -.-> P2
+            end
+        end
+    end
+    DEV --> SVC1
+    DEV --> SVC2
+    IMG -.->|"image pull (IfNotPresent)"| P1
+    IMG -.-> P2

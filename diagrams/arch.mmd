@@ -1,0 +1,20 @@
+flowchart LR
+    PM["Client<br/>Postman / curl / browser"]
+    GW["API Gateway<br/>(future scope)"]:::future
+    BS["Book Service<br/>Spring Boot, port 8082"]
+    MS["Member Service<br/>Spring Boot, port 8081"]
+    BDB[("H2 bookdb")]
+    MDB[("H2 memberdb")]
+    NS["Notification Service<br/>overdue reminders<br/>(future scope)"]:::future
+
+    PM -->|"REST/JSON"| BS
+    PM -->|"REST/JSON"| MS
+    PM -.-> GW
+    GW -.-> BS
+    GW -.-> MS
+    BS -->|"REST: GET /api/members/id"| MS
+    BS --- BDB
+    MS --- MDB
+    BS -.->|"event (future)"| NS
+
+    classDef future stroke-dasharray: 5 5,fill:#f5f5f5,color:#555

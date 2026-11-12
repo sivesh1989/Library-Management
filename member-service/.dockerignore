@@ -1,0 +1,6 @@
+src
+.git
+.idea
+.vscode
+*.md
+k8s

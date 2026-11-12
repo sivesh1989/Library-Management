@@ -1,0 +1,11 @@
+flowchart LR
+    subgraph BC["Business capabilities"]
+        B1[Member Management]
+        B2[Book Catalogue Management]
+        B3[Lending Management]
+        B4[Overdue Notification]
+    end
+    B1 --> S1[Member Service]
+    B2 --> S2[Book Service]
+    B3 --> S2
+    B4 -.-> S3[Notification Service - future]
